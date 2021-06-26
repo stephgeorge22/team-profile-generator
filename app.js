@@ -1,6 +1,7 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const Team = require('./lib/Team');
 const inquirer = require("inquirer");
 inquirer.registerPrompt('recursive', require('inquirer-recursive'));
 const path = require("path");
@@ -19,7 +20,7 @@ const promptUser = () => {
     return inquirer.prompt({
         type: 'recursive',
         message: 'Would you like to add a new team player?',
-        name: 'team',
+        name: 'employees',
         prompts: [
             {
                 type: 'input',
@@ -62,15 +63,19 @@ const promptUser = () => {
             }
         ]
     }) .then(function(answers) {
-            console.log(answers.team);
+            console.log(answers.employees);
         });
 };
-
-promptUser();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
+
+promptUser()
+    .then(new Team().initializeTeam());
+//     .then(promptUser => {
+//     return render(promptUser);
+//   })
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
