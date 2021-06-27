@@ -62,7 +62,8 @@ const promptUser = () => {
                 }
             }
         ]
-    }) .then(function(answers) {
+    }) 
+    .then(function(answers) {
             console.log(answers.employees);
         });
 };
@@ -72,10 +73,13 @@ const promptUser = () => {
 // generate and return a block of HTML including templated divs for each employee!
 
 promptUser()
-    .then(new Team().initializeTeam());
+
+    .then(() => new Team().initializeTeam());
 //     .then(promptUser => {
 //     return render(promptUser);
 //   })
+
+
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
