@@ -12,11 +12,15 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 // inquirer recursive to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+// function Team() {
+//     this.employee = [];
+// }
+
 const promptUser = () => {
+
     return inquirer.prompt({
         type: 'recursive',
         message: 'Would you like to add a new team player?',
@@ -25,25 +29,25 @@ const promptUser = () => {
             {
                 type: 'input',
                 name: 'name',
-                message: 'Enter their name? (Required)',
+                message: 'Enter team members name? (Required)',
                 validate: nameInput => {
                     if (nameInput) {
                         return true;
                     } else {
-                        console.log('Please enter their name!');
+                        console.log('Please enter their name.');
                         return false;
                     }
                 }
             },
             {
                 type: 'input',
-                name: 'github',
-                message: 'Enter their GitHub Username (Required)',
-                validate: githubInput => {
-                    if (githubInput) {
+                name: 'id',
+                message: 'Enter their Employee ID (Required)',
+                validate: idInput => {
+                    if (idInput) {
                         return true;
                     } else {
-                        console.log('Please enter their GitHub username!');
+                        console.log('Please enter their Employee ID.');
                         return false;
                     }
                 }
@@ -56,8 +60,68 @@ const promptUser = () => {
                     if (emailInput) {
                         return true;
                     } else {
-                        console.log('Please enter their email!');
+                        console.log('Please enter their email.');
                         return false;
+                    }
+                }
+            },
+            {
+                type: 'list',
+                name: 'role',
+                message: 'Select their role (Required)',
+                choices: [
+                    "Manager",
+                    "Engineer",
+                    "Intern"
+                ],
+                validate: roleInput => {
+                    if (roleInput) {
+                        return true;
+                    } else {
+                        console.log('Please select their email.');
+                        return false;
+                    }
+                }
+            },
+            {
+                type: 'input',
+                name: 'officeNumber',
+                message: 'What is their office number? (Required)',
+                when: (answers) => answers.role === 'Manager',
+                validate: officeNumberInput => {
+                    if (officeNumberInput) {
+                    return true;
+                    } else {
+                    console.log('Please enter their office number.');
+                    return false;
+                    }
+                }
+            },
+            {
+                type: 'input',
+                name: 'github',
+                message: 'What is their github username? (Required)',
+                when: (answers) => answers.role === 'Engineer',
+                validate: githubInput => {
+                    if (githubInput) {
+                    return true;
+                    } else {
+                    console.log('Please enter their github username.');
+                    return false;
+                    }
+                }
+            },
+            {
+                type: 'input',
+                name: 'school',
+                message: 'What school do they attend? (Required)',
+                when: (answers) => answers.role === 'Intern',
+                validate: schoolInput => {
+                    if (schoolInput) {
+                    return true;
+                    } else {
+                    console.log('Please enter their school.');
+                    return false;
                     }
                 }
             }
@@ -73,8 +137,18 @@ const promptUser = () => {
 // generate and return a block of HTML including templated divs for each employee!
 
 promptUser()
+// .then(({ name, id, email, role }) => {
+//     this.name = new Employee(name);
+//     this.id = new Employee(id);
+//     this.email = new Employee(email);
+//     this.role = new Employee(role);
 
-    .then(() => new Team().initializeTeam());
+//     this.startTeam();
+// });
+
+
+
+//  .then(() => new Team().initializeTeam());
 //     .then(promptUser => {
 //     return render(promptUser);
 //   })
