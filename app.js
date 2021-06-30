@@ -1,7 +1,7 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const Team = require('./lib/Team');
+const Employee = require("./lib/Employee");
 const inquirer = require("inquirer");
 inquirer.registerPrompt('recursive', require('inquirer-recursive'));
 const path = require("path");
@@ -11,19 +11,18 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { createHistogram } = require("perf_hooks");
+const { stringify } = require("querystring");
+const { inherits } = require("util");
 
 // inquirer recursive to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-
-// function Team() {
-//     this.employee = [];
-// }
 
 const promptUser = () => {
 
     return inquirer.prompt({
         type: 'recursive',
-        message: 'Would you like to add a new team player?',
+        message: 'Would you like to add a new team member?',
         name: 'employees',
         prompts: [
             {
@@ -126,10 +125,11 @@ const promptUser = () => {
                 }
             }
         ]
+
     }) 
-    .then(function(answers) {
-            console.log(answers.employees);
-        });
+    // .then(function(answers) {
+    //     return answers;
+    // });
 };
 
 // After the user has input all employees desired, call the `render` function (required
@@ -137,22 +137,28 @@ const promptUser = () => {
 // generate and return a block of HTML including templated divs for each employee!
 
 promptUser()
-// .then(({ name, id, email, role }) => {
-//     this.name = new Employee(name);
-//     this.id = new Employee(id);
-//     this.email = new Employee(email);
-//     this.role = new Employee(role);
+.then( answers => {
+    employees = [];
+    employeeObjects = answers.employees
 
-//     this.startTeam();
-// });
+    for (i=0; i<employeeObjects.length; i++) {
+        role = answers.employees[i].role
 
-
-
-//  .then(() => new Team().initializeTeam());
-//     .then(promptUser => {
-//     return render(promptUser);
-//   })
-
+        if (role === "Manager") {
+            manager = new Manager(answers.employees[i].name, answers.employees[i].id, answers.employees[i].email, answers.employees[i].officeNumber)
+            employees.push(manager)
+        } else if (role === "Engineer") {
+            engineer = new Engineer(answers.employees[i].name, answers.employees[i].id, answers.employees[i].email, answers.employees[i].github)
+            employees.push(engineer)
+        } else {
+            intern = new Intern(answers.employees[i].name, answers.employees[i].id, answers.employees[i].email, answers.employees[i].school)
+            employees.push(intern)
+        };
+    };
+    console.log(employees)
+    const html = render(employees)
+    
+});
 
 
 // After you have your html, you're now ready to create an HTML file using the HTML
