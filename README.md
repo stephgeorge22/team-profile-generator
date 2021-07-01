@@ -1,7 +1,7 @@
 # Team Profile Generator
 
 ## Description 
-This application prompts the user with employee related questions for managers, engineers and teams. The inputs are used to generate an html file with the team information. 
+This application prompts the user with employee related questions for managers, engineers and interns. The inputs are used to generate an html file with the team information. 
 
 ## Table of Contents
 
